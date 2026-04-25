@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 4px;
+  border: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 0 4px rgba(6, 182, 212, 0.3);
+}
+
+/* Toast Animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #0891b2 0%, #7c3aed 50%, #db2777 100%);
+  box-shadow: 0 0 6px rgba(6, 182, 212, 0.5);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #0e7490 0%, #6d28d9 50%, #be185d 100%);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.7);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(17, 24, 39, 0.8);
+}
+
+/* Textarea and specific component scrollbars */
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.6);
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(6, 182, 212, 0.4);
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+}
+
+/* Scrollable containers with custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.4);
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(31, 41, 55, 0.6);
+  box-shadow: 0 0 6px rgba(6, 182, 212, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+}
+
+/* Firefox Scrollbar Styling */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #06b6d4 rgba(17, 24, 39, 0.8);
+}
+
+textarea {
+  scrollbar-width: thin;
+  scrollbar-color: #06b6d4 rgba(31, 41, 55, 0.6);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #06b6d4 rgba(31, 41, 55, 0.4);
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 100%;
+  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+textarea {
+  height: 390px;
+}
+
+/* Custom Toggle Switch Styling */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  background: linear-gradient(135deg, #374151, #1f2937);
+  border: 2px solid #4b5563;
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.active {
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  border-color: #06b6d4;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.toggle-switch.active.linkedin {
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  border-color: #3b82f6;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.toggle-switch.active.facebook {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  border-color: #60a5fa;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 15px rgba(96, 165, 250, 0.4);
+}
+
+.toggle-switch.active.instagram {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  border-color: #a855f7;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+.toggle-switch-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.toggle-switch.active .toggle-switch-handle {
+  transform: translateX(24px);
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.toggle-switch-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.toggle-switch.active .toggle-switch-glow {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

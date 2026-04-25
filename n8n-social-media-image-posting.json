@@ -1,0 +1,892 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook7').item.json.body.topic || $('Webhook7').item.json.query.topic || $('Webhook7').item.json.topic || 'AI and automation' }}",
+        "options": {
+          "systemMessage": "You are Abdul Wahab, a world-class Full-Stack Web & AI Systems Engineer and technology strategist. You build scalable, secure, and production-grade web and AI platforms, integrating modern web technologies (React.js, Laravel, PHP, JS) with advanced AI/ML pipelines. You create intelligent systems that align technical execution with business goals, delivering measurable impact.\n\nYour task is to transform the user’s topic into a highly engaging, professional, and business-focused social media caption that feels authentic, confident, and human, perfectly suited for LinkedIn, Facebook, and Instagram.\n\n✨ Writing Requirements\n\nTone: professional, confident, human, business-oriented\n\nHook: start with a strong, attention-grabbing line\n\nStructure: short paragraphs, clean flow, easy readability\n\nContent: highlight problem-solving, technical expertise, business impact, AI or automation insights\n\nStorytelling: subtle storytelling or motivational elements aligned with business & tech growth\n\nEmojis: tasteful, enhancing meaning (💼, 🚀, 📈, 🤖, 🔧)\n\nHashtags: include 3–6 highly relevant hashtags automatically based on topic (e.g., #FullStack #AIEngineering #BusinessGrowth #Automation)\n\nLength: under 250 words\n\nOutput: only the final caption text — no metadata, no code blocks, no extra instructions\n\n📱 Platform Guidelines\n\nLinkedIn: emphasize leadership, strategy, and technical vision\n\nFacebook: keep it approachable, engaging, and value-driven\n\nInstagram: visually appealing, motivational, and tech-focused\n\nThe caption must work seamlessly across all three platforms\n\n🎯 Goal\n\nGenerate a caption that:\n\nReflects Abdul Wahab’s expertise in full-stack development, AI/LLM integration, and scalable systems\n\nHighlights business impact, technical insight, and thought leadership\n\nConnects with tech peers, business stakeholders, and potential clients\n\nUses emojis and hashtags strategically to enhance engagement and meaning\n\nFeels authentic, confident, and high-value — like Abdul Wahab personally wrote it\n\n🌈 Example Style (Do Not Copy)\n\nBuilding intelligent systems isn’t just about code — it’s about solving real business problems at scale 💼🤖\n\nOver the last project, we integrated LLM-driven automation with our Laravel & React.js platform, reducing manual workflows by 40% and increasing user engagement by 30% 🚀📈\n\nWhen technical excellence meets business vision, innovation becomes tangible. Let’s engineer smarter solutions, together.\n\n#FullStack #AIEngineering #BusinessGrowth #Automation #TechLeadership #Innovation"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        7184,
+        6304
+      ],
+      "id": "58572ae1-9b98-42f7-9a60-dc95422649b2",
+      "name": "AI Agent7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        7184,
+        6544
+      ],
+      "id": "bae1b695-54fc-4e3b-ac5b-b66177f47697",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ffP021MyOe3F9mPv",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "36549d14-0976-4efb-b91c-314fbae8df65",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        6960,
+        6304
+      ],
+      "id": "107fc2fb-e448-4d95-b104-2f67f65c0557",
+      "name": "Webhook7",
+      "webhookId": "36549d14-0976-4efb-b91c-314fbae8df65"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"generatedPost\": $json.captionText, \"imageBase64\": $json.imageBase64, \"confirmUrl\": \"https://abwahab12.app.n8n.cloud/webhook/confirm-post\", \"message\": \"Post and image generated successfully. Send POST to confirmUrl with {platforms, post, imageBase64} to publish.\" } }}",
+        "options": {}
+      },
+      "id": "aa8c33e4-788b-4d6b-8c25-e00a418c6c49",
+      "name": "Return Generated Post7",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        8208,
+        6304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst updatedItems = items.map((item) => {\n  if (item.json.output && item.json.output.Post) {\n    item.json.output.Post = item.json.output.Post.replace(/\\n/g, \"\\\\n\");\n  }\n  return item;\n});\n\nreturn updatedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7536,
+        6304
+      ],
+      "id": "e2a7aba3-57b2-4946-9524-27703e6cadb0",
+      "name": "Post Formating7"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/imagen-4.0-generate-001",
+          "mode": "list",
+          "cachedResultName": "models/imagen-4.0-generate-001"
+        },
+        "prompt": "=Create a clean, modern, and highly professional social-media image that visually represents the ideas, mood, and message of the following caption.\n\nImportant:\n\nDo NOT place the caption text on the image.\n\nUse the caption only as conceptual inspiration.\n\nCaption for context:\n{{ $('Post Formating7').item.json.output }}\n\nImage Requirements:\n\nMinimalistic, aesthetic, and premium design\n\nStrong visual storytelling that reflects the meaning of the caption\n\nNo text, no quotes, no typography\n\nSoft lighting, clean composition, modern color palette\n\nSuitable for LinkedIn, Instagram, and Facebook\n\nProfessional, elegant, and polished\n\nFocus on clarity, simplicity, and visual impact\n\nGoal:\nProduce an image that feels aligned with the caption, visually communicates its theme, and fits seamlessly into a high-quality professional social media post.",
+        "options": {}
+      },
+      "id": "1e799b27-7c74-419e-aa9b-24c58fc7d0a7",
+      "name": "Generate Image7",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        7760,
+        6304
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ffP021MyOe3F9mPv",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst item = items[0];\n\n// Get the binary data buffer using the correct n8n helper method\nconst buffer = await this.helpers.getBinaryDataBuffer(0, 'data');\n\n// Convert buffer to base64\nconst base64String = buffer.toString('base64');\n\n// Get caption text from Post Formating node\nconst captionText = $('Post Formating7').first().json.output;\n\n// Return the result\nreturn [{\n  json: {\n    captionText: captionText,\n    imageBase64: base64String\n  }\n}];"
+      },
+      "id": "d292a783-d361-4d86-a478-70010f78fa45",
+      "name": "Convert Binary to Base70",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7984,
+        6304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/v2/ugcPosts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { author: 'urn:li:person:' + $('Get data Linkdin7').item.json.sub, lifecycleState: 'PUBLISHED', specificContent: { 'com.linkedin.ugc.ShareContent': { shareCommentary: { text: $('Confirm Webhook7').item.json.body.post }, shareMediaCategory: 'IMAGE', media: [{ status: 'READY', media: $('Merge Binary with Upload Info').item.json.value.asset }] } }, visibility: { 'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC' } } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        8816,
+        7120
+      ],
+      "id": "28b14086-e1cd-4feb-a3c8-fe25624e4523",
+      "name": "Post to LinkedIn7",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ffZTVCK6uHohbzSe",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v22.0",
+        "node": "={{ $json.node }}",
+        "edge": "media",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "image_url",
+                "value": "={{ $json.imageUrl }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $json.captionText }}"
+              },
+              {
+                "name": "node",
+                "value": "={{ $json.node }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        8000,
+        6832
+      ],
+      "id": "70ab1298-16a6-40ca-96b7-954d31b6651f",
+      "name": "Get data Instagram7",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "9N2F2Twzvg7UnxrN",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "imageUrl",
+              "value": "={{ $('Confirm Webhook7').item.json.body.imageUrl }}",
+              "type": "string",
+              "id": "6320e300-dc2e-4caa-ba94-0081afa7ca98"
+            },
+            {
+              "name": "captionText",
+              "value": "={{ $('Confirm Webhook7').item.json.body.post }}",
+              "type": "string",
+              "id": "6922fc34-94b5-44bc-b620-8d866a8a8acc"
+            },
+            {
+              "name": "node",
+              "value": "17841452500837606",
+              "type": "string",
+              "id": "id-3"
+            },
+            {
+              "id": "7501dcb8-9375-4609-a6ee-091a1f4c1ca4",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7632,
+        6832
+      ],
+      "id": "3903a817-fd44-44b5-a276-c44227fe1d6d",
+      "name": "Set Instagram Parameters7"
+    },
+    {
+      "parameters": {
+        "url": "https://api.linkedin.com/v2/userinfo",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        7616,
+        7120
+      ],
+      "id": "0bd0f562-db05-43fb-9cd2-b007268a3cc7",
+      "name": "Get data Linkdin7",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ffZTVCK6uHohbzSe",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v22.0",
+        "node": "={{ $('Set Instagram Parameters7').item.json.node }}",
+        "edge": "media_publish",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "creation_id",
+                "value": "={{ $('Get data Instagram7').item.json.id }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        8784,
+        6832
+      ],
+      "id": "a6455a8f-7198-40d4-98eb-255b7ad6c718",
+      "name": "Post to Instagaram7",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "9N2F2Twzvg7UnxrN",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "confirm-post",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "af56de5b-7c34-4cb3-a6cb-fa34d3524da4",
+      "name": "Confirm Webhook7",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        6960,
+        6832
+      ],
+      "webhookId": "278e3182-5c96-4842-952b-6e67ab9f8885"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "89efd658-0cb7-4cc1-83a8-6bfe3f20faf0",
+      "name": "Wait for Media Processing7",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        8416,
+        6832
+      ],
+      "webhookId": "fad3ea47-92a0-4812-82e0-9f4ae2005722"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPlatform }}",
+                    "rightValue": "facebook",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e223fdda-2fd0-460d-9de1-2ce752a9afa8"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPlatform }}",
+                    "rightValue": "instagram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "efc93db7-9fe7-4ff8-8012-d64e9403efae"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.currentPlatform }}",
+                    "rightValue": "linkedin",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1430d33f-6654-4464-a674-38d6027cf961"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none",
+          "ignoreCase": false,
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        7408,
+        6816
+      ],
+      "id": "5b4cfbc9-9925-4c19-961a-d4777103b55a",
+      "name": "Platform Filter20"
+    },
+    {
+      "parameters": {
+        "jsCode": "const platforms = $input.first().json.body.platforms || [];\nconst item = $input.first();\n\nreturn platforms.map(platform => ({\n  json: {\n    ...item.json,\n    currentPlatform: platform\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7184,
+        6832
+      ],
+      "id": "58febd1d-c4e0-4c90-82cf-87181fafcdcd",
+      "name": "Code in JavaScript13"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/v2/assets?action=registerUpload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"registerUploadRequest\": { \"recipes\": [\"urn:li:digitalmediaRecipe:feedshare-image\"], \"owner\": \"urn:li:person:\" + $('Get data Linkdin7').item.json.sub, \"serviceRelationships\": [{ \"relationshipType\": \"OWNER\", \"identifier\": \"urn:li:userGeneratedContent\" }] } } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "22ea3b58-4f12-41b2-b7b0-1b4a0674108b",
+      "name": "Register LinkedIn Image Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        8096,
+        7120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ffZTVCK6uHohbzSe",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Confirm Webhook7').item.json.body.imageUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "c3f8f049-7e0d-408a-b5d7-e1c4ef826120",
+      "name": "Download Image from URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        7840,
+        7120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.value.uploadMechanism['com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest'].uploadUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "id": "10b523ab-2091-43be-bc5d-ba8d0ad5ddf2",
+      "name": "Upload Image to LinkedIn",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        8576,
+        7120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const uploadInfo = $input.first().json;\nconst binaryData = $('Download Image from URL').first().binary;\n\nreturn [{\n  json: uploadInfo,\n  binary: binaryData\n}];"
+      },
+      "id": "90dd9149-e58b-43f0-9228-e1268c076929",
+      "name": "Merge Binary with Upload Info",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8336,
+        7120
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Confirm Webhook7').item.json.body.imageUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "2e77d9b3-efe0-430e-9068-6ea452df690f",
+      "name": "Download Image for Facebook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        7632,
+        6592
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/779014315304764/photos",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $('Confirm Webhook7').item.json.body.post }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "source",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "266634d0-22b2-4540-ab61-a52b3490a16b",
+      "name": "Upload Photo to Facebook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        8800,
+        6592
+      ],
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "9N2F2Twzvg7UnxrN",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "efcb2642-294f-47b7-9cce-7362a397ce40",
+      "name": "Collect Platform Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        9088,
+        6832
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst platformResults = [];\nlet overallSuccess = true;\n\n// Process each platform result\nfor (const item of items) {\n  const platform = item.json.currentPlatform || 'unknown';\n  \n  // Check if the item has error information\n  if (item.json.error) {\n    platformResults.push({\n      platform: platform,\n      status: 'error',\n      message: item.json.error.message || 'Unknown error occurred',\n      details: item.json.error\n    });\n    overallSuccess = false;\n  } else {\n    // Success case\n    platformResults.push({\n      platform: platform,\n      status: 'success',\n      message: `Successfully posted to ${platform}`,\n      details: {\n        id: item.json.id || null,\n        response: item.json\n      }\n    });\n  }\n}\n\n// Build final response\nconst response = {\n  status: overallSuccess ? 'success' : 'partial_success',\n  message: overallSuccess \n    ? 'All posts published successfully' \n    : 'Some posts failed to publish',\n  totalPlatforms: platformResults.length,\n  successCount: platformResults.filter(r => r.status === 'success').length,\n  errorCount: platformResults.filter(r => r.status === 'error').length,\n  platforms: platformResults\n};\n\nreturn [{ json: response }];"
+      },
+      "id": "9ce0dbb1-1406-4866-9376-5e931e987ccf",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9312,
+        6832
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "d6cef7fc-4264-4eff-a137-fb52a39cd520",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        9520,
+        6832
+      ]
+    }
+  ],
+  "connections": {
+    "AI Agent7": {
+      "main": [
+        [
+          {
+            "node": "Post Formating7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent7",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook7": {
+      "main": [
+        [
+          {
+            "node": "AI Agent7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Formating7": {
+      "main": [
+        [
+          {
+            "node": "Generate Image7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image7": {
+      "main": [
+        [
+          {
+            "node": "Convert Binary to Base70",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Binary to Base70": {
+      "main": [
+        [
+          {
+            "node": "Return Generated Post7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to LinkedIn7": {
+      "main": [
+        [
+          {
+            "node": "Collect Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get data Instagram7": {
+      "main": [
+        [
+          {
+            "node": "Wait for Media Processing7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Instagram Parameters7": {
+      "main": [
+        [
+          {
+            "node": "Get data Instagram7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get data Linkdin7": {
+      "main": [
+        [
+          {
+            "node": "Download Image from URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Instagaram7": {
+      "main": [
+        [
+          {
+            "node": "Collect Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Webhook7": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Media Processing7": {
+      "main": [
+        [
+          {
+            "node": "Post to Instagaram7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Platform Filter20": {
+      "main": [
+        [
+          {
+            "node": "Download Image for Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Instagram Parameters7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get data Linkdin7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript13": {
+      "main": [
+        [
+          {
+            "node": "Platform Filter20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register LinkedIn Image Upload": {
+      "main": [
+        [
+          {
+            "node": "Merge Binary with Upload Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image from URL": {
+      "main": [
+        [
+          {
+            "node": "Register LinkedIn Image Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image to LinkedIn": {
+      "main": [
+        [
+          {
+            "node": "Post to LinkedIn7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Binary with Upload Info": {
+      "main": [
+        [
+          {
+            "node": "Upload Image to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image for Facebook": {
+      "main": [
+        [
+          {
+            "node": "Upload Photo to Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photo to Facebook": {
+      "main": [
+        [
+          {
+            "node": "Collect Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Platform Results": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f362a311e6a13e7c450f8f20d22e1a5b03389011af840a0929ad5576e7148c4b"
+  }
+}
